@@ -1,4 +1,114 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>About Page</h2>
+
+{{list_of_numbers}}
+
+<!-- Однако, поскольку это список, одна из прелестей фреймворков — возможность повторять
+по спискам с использованием цикла for.
+Для этого мы используем нотацию , потому что, если вы помните, это для утверждений, а не
+для выражений.
+Это называется «логическое управление».
+Я напишу стандартный шаблон цикла for:  for number in list_of_numbers .
+Нам всегда нужно останавливать цикл for с помощью оператора endfor:  endfor
+. -->
+
+{% for number in list_of_numbers %}
+        <p>{{ number }}</p>
+{% endfor %}
+
+{{company}}
+<!-- на странице появляется полностью весь ОБЪЕКТ -->
+<p></p>
+
+{{company[0]["name"]}}
+<!-- Thorin Oakenshield -->
+<p></p>
+{{company[0]["image_source"]}}
+<!-- https://vignette.wikia.nocookie.net/lotr/images/3/3f/ThorinBIG.jpg -->
+<p></p>
+{{company[1]["name"]}}
+<!-- Kili & Fili  - то есть следующий объект-->
+
+
+
+    <h2>{{page_title}}</h2>
+    <!-- взято с render_template с run.py -->
+    <p>
+        The formation of the group grew out of a meeting Gandalf had with Thorin in Bree which kindled Thorin's interest in recapturing his long lost family inheritance. (Thorin's grandfather had been the King under the Mountain when Smaug came and took it.) Remembering that he had once known an adventurous Hobbit on his travels in the Shire, Gandalf decided to add Bilbo to their company because he knew that stealth and cunning were preferable to force. Gandalf also believed that someone like Bilbo could keep the sometimes prideful and stubborn Dwarves from rash action. The superstitious Dwarves also considered thirteen to be an unlucky number, and as Gandalf had planned to leave on other business, welcomed a fourteenth to fill into their party.
+    </p>
+    
+    {% for member in company %} 
+    <!-- for loop -- company  -->
+
+    <!-- {{loop.index}} This shows us exactly which iteration of the loop we're on.-->
+    <!-- когда создается цикл создается объект цикл, который имеет свойство индекс -->
+
+        <div class="row featurette">
+
+            {% if loop.index % 2 != 0 %}
+            <!-- использует нотацию с процентами для логического дейтсвия - if statments -->
+            <!-- здаем проверку если итерация нечтная -->
+
+            <div class="col-md-7">
+                <h3><a href="/about/{{ member.url }}">{{ loop.index }}. {{ member.name }}</a></h3> 
+                <!-- вставили {{loop.index}} - которое перед именем выводит число
+                1. Thorin Oakenshield -->
+                <p>{{ member.description }}</p>
+            </div>
+            <div class="col-md-5">
+                <img src="{{ member.image_source }}" alt="" class="featurette-image image-responsive">
+            </div>
+
+            {% else %}
+            <!-- вводим условие else также используя нотацию с процентами для лог действия -->
+            <!-- то есть задает отдельный код для четных итераций -->
+
+            <div class="col-md-5">
+                <img src="{{ member.image_source }}" alt="" class="featurette-image image-responsive">
+            </div>
+            <div class="col-md-7">
+                <h3><a href="/about/{{ member.url }}">{{ loop.index }}. {{ member.name }}</a></h3>
+                <p>{{ member.description }}</p>
+            </div>
+
+        {% endif %}
+        <!-- закрываем логический блок if-else -->
+
+        </div>
+
+        <!-- хотим обрать горизонтальную линию (hr) после последнего элемента -->
+        {% if loop.index != loop.length %}
+        <!-- задаем еще олно условие что пока число итераци не равно длине цикла
+        мы выводим в конце итерации <hr class="featurette-divider"> -->
+
+        <!-- другие доступные методы можно посмотреть в официальной документации
+        jinja.palletsprojects.com -->
+
+        <hr class="featurette-divider">
+
+        {% endif %}
+
+    {% endfor %} 
+    <!-- обязательно показать где точно заканчивается итерация -->
+
+
+    <!-- а так все выглядело без цикла -->
+    <!-- <div class="row featurette">
+        <div class="col-md-7">
+            <h3>Thorin Oakenshield</h3>
+			<p>
+				In the year TA 2746, Thorin II was born to Dwarven prince Thráin II in the mountain city of The Lonely Mountain.
+				Early in his youth, he and the other Dwarves of the Lonely Mountain were forced to flee by the dragon Smaug in TA
+				2770. While in exile, he quickly grew to become a capable warrior. This was demonstrated when he participated in the
+				Battle of Azanulbizar in TA 2799. He marched with one of the Dwarven armies beneath the East-gate of Moria. At some
+				point in the fighting, his shield broke, and using an oaken tree branch found on the floor as a shield, he gained
+				the epithet "Oakenshield," which would remain with him even in death.
+			</p>
+        </div>
+        <div class="col-md-5">
+            <img src="https://vignette.wikia.nocookie.net/lotr/images/3/3f/ThorinBIG.jpg" alt="">
+        </div>
+    </div> -->
+
+    
 {% endblock %}
